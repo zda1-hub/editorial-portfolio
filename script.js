@@ -90,7 +90,7 @@ function finishDrag(event) {
 stage.addEventListener('pointerup', finishDrag);
 stage.addEventListener('pointercancel', finishDrag);
 
-stage.querySelectorAll('.tile').forEach((tile) => tile.addEventListener('click', () => {
+document.querySelectorAll('.tile, .win-feature-tile').forEach((tile) => tile.addEventListener('click', () => {
   if (!moved) openDetail(tile);
 }));
 
