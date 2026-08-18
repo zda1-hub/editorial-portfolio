@@ -14,7 +14,7 @@
         <nav aria-label="Portfolio view">
           <button class="nav-link is-active" type="button" data-view="work">work</button>
           <button class="nav-link" type="button" data-view="join">join</button>
-          <button class="nav-link" type="button" data-view="resume">resume</button>
+          <button class="nav-link" type="button" data-view="wins">recent wins</button>
         </nav>
       </header>
 
@@ -68,22 +68,20 @@
           <a class="join-button" href="https://zda1-hub.github.io/kobes-betting-hub/membership.html">View membership</a>
           <p class="membership-terms">Renews monthly until canceled. Review the membership page for current access and billing details.</p>
         </article>
+        <section class="member-reviews" aria-labelledby="reviews-title">
+          <p class="join-kicker">MEMBER REVIEWS</p>
+          <h3 id="reviews-title">What members are saying.</h3>
+          <p>Verified member reviews will be added here as Kobe sends them over.</p>
+        </section>
       </section>
 
-      <section class="panel resume" id="resume" aria-label="Mara Quinn resume">
-        <article class="resume-sheet">
-          <div class="resume-topline"><span>MAR A QUINN</span><span>Stylist / Creative Direction</span></div>
-          <h2>Selected experience</h2>
-          <div class="resume-grid">
-            <div><strong>Freelance stylist</strong><span>Los Angeles, CA · 2023—present</span></div>
-            <p>Editorial, campaign, and personal styling for independent creatives and fashion brands.</p>
-            <div><strong>Studio assistant</strong><span>West Coast · 2021—2023</span></div>
-            <p>Wardrobe pulls, fitting support, onset continuity, creative research, and visual references.</p>
-            <div><strong>Fashion media studies</strong><span>California · 2019—2021</span></div>
-            <p>Focus on visual communication, styling, art direction, and contemporary fashion practice.</p>
-          </div>
-          <div class="resume-footer">Available for editorial, commercial, and collaborative projects.</div>
-        </article>
+      <section class="panel wins" id="wins" aria-label="Recent winning recaps">
+        <div class="wins-heading">
+          <p class="join-kicker">DAILY RECAPS</p>
+          <h2>Recent wins.</h2>
+          <p>Only recaps with an 85% win rate or higher are shown here. Each entry is dated and based on the official daily Discord recap.</p>
+        </div>
+        <div class="recap-list" data-recap-list aria-live="polite"></div>
       </section>
 
       <footer class="site-footer">
@@ -101,6 +99,7 @@
         <img class="detail-image" alt="" />
       </section>
     </main>
+    <script src="recaps.js?v=recaps-20260818"></script>
     <script src="script.js?v=side-scroll-20260818"></script>
   </body>
 </html>
