@@ -1,7 +1,4 @@
-const minimumWinRate = 85;
-
-// Add only official daily Discord recaps here after Kobe sends them.
-// Entries under the 85% threshold are automatically kept off the website.
+// Add approved recent Discord picks here after Kobe sends them.
 const dailyRecaps = [];
 
 const recapList = document.querySelector('[data-recap-list]');
@@ -15,26 +12,24 @@ function formatRecapDate(date) {
 }
 
 function renderRecaps() {
-  const eligibleRecaps = dailyRecaps
-    .filter((recap) => recap.winRate >= minimumWinRate)
+  const recentRecaps = [...dailyRecaps]
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  if (!eligibleRecaps.length) {
+  if (!recentRecaps.length) {
     recapList.innerHTML = `
       <article class="recap-empty">
-        <span>85%+</span>
-        <h3>Recaps are on the way.</h3>
-        <p>Official daily recap screenshots and dates will appear here once Kobe sends them over.</p>
+        <span>FROM THE DISCORD</span>
+        <h3>Recent picks are on the way.</h3>
+        <p>Fresh picks, slips, and Discord posts will appear here once Kobe sends them over.</p>
       </article>`;
     return;
   }
 
-  recapList.innerHTML = eligibleRecaps.map((recap) => `
+  recapList.innerHTML = recentRecaps.map((recap) => `
     <article class="recap-card">
       <div class="recap-date">${formatRecapDate(recap.date)}</div>
-      <div class="recap-rate">${recap.winRate}% <span>win rate</span></div>
       <img src="${recap.image}" alt="${recap.alt || 'Daily winning recap'}" />
-      <p>${recap.summary || 'Official daily Discord recap.'}</p>
+      <p>${recap.summary || 'Recent Discord post.'}</p>
     </article>`).join('');
 }
 

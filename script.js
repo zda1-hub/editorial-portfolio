@@ -2,6 +2,7 @@ const buttons = [...document.querySelectorAll('.nav-link')];
 const panels = [...document.querySelectorAll('.panel')];
 const stage = document.querySelector('.work-stage');
 const track = document.querySelector('.gallery-track');
+const winsScrollStage = document.querySelector('.wins-scroll-stage');
 const overlay = document.querySelector('.detail-overlay');
 const detailImage = document.querySelector('.detail-image');
 const detailTitle = document.querySelector('.detail-copy h2');
@@ -62,6 +63,11 @@ stage.addEventListener('wheel', (event) => {
   positionTrack();
 }, { passive: false });
 
+winsScrollStage.addEventListener('wheel', (event) => {
+  event.preventDefault();
+  winsScrollStage.scrollLeft += event.deltaY + event.deltaX;
+}, { passive: false });
+
 stage.addEventListener('pointerdown', (event) => {
   if (event.button !== 0) return;
   pointerStart = event.clientX;
@@ -90,12 +96,12 @@ function finishDrag(event) {
 stage.addEventListener('pointerup', finishDrag);
 stage.addEventListener('pointercancel', finishDrag);
 
-document.querySelectorAll('.tile, .win-feature-tile').forEach((tile) => {
+document.querySelectorAll('.tile, .wins-scroll-tile').forEach((tile) => {
   tile.tabIndex = 0;
   tile.setAttribute('role', 'button');
   tile.setAttribute('aria-label', `Enlarge ${tile.dataset.title}`);
   tile.addEventListener('click', () => {
-    if (!moved) openDetail(tile);
+    if (!tile.closest('.work-stage') || !moved) openDetail(tile);
   });
   tile.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
