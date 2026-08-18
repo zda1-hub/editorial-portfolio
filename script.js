@@ -90,11 +90,23 @@ function finishDrag(event) {
 stage.addEventListener('pointerup', finishDrag);
 stage.addEventListener('pointercancel', finishDrag);
 
-document.querySelectorAll('.tile, .win-feature-tile').forEach((tile) => tile.addEventListener('click', () => {
-  if (!moved) openDetail(tile);
-}));
+document.querySelectorAll('.tile, .win-feature-tile').forEach((tile) => {
+  tile.tabIndex = 0;
+  tile.setAttribute('role', 'button');
+  tile.setAttribute('aria-label', `Enlarge ${tile.dataset.title}`);
+  tile.addEventListener('click', () => {
+    if (!moved) openDetail(tile);
+  });
+  tile.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openDetail(tile);
+    }
+  });
+});
 
 overlay.querySelector('.detail-close').addEventListener('click', closeDetail);
+detailImage.addEventListener('click', closeDetail);
 overlay.addEventListener('click', (event) => {
   if (event.target === overlay) closeDetail();
 });
