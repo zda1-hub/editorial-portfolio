@@ -96,7 +96,7 @@ function finishDrag(event) {
 stage.addEventListener('pointerup', finishDrag);
 stage.addEventListener('pointercancel', finishDrag);
 
-document.querySelectorAll('.tile, .wins-scroll-tile').forEach((tile) => {
+document.querySelectorAll('.tile, .wins-scroll-tile, .recap-card').forEach((tile) => {
   tile.tabIndex = 0;
   tile.setAttribute('role', 'button');
   tile.setAttribute('aria-label', `Enlarge ${tile.dataset.title}`);
