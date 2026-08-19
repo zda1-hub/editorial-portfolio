@@ -3,6 +3,8 @@ const panels = [...document.querySelectorAll('.panel')];
 const stage = document.querySelector('.work-stage');
 const track = document.querySelector('.gallery-track');
 const winsScrollStage = document.querySelector('.wins-scroll-stage');
+const kobesWinsPanel = document.querySelector('#kobes-wins');
+const autoScrollToggle = document.querySelector('.auto-scroll-toggle');
 const overlay = document.querySelector('.detail-overlay');
 const detailImage = document.querySelector('.detail-image');
 const detailTitle = document.querySelector('.detail-copy h2');
@@ -21,6 +23,8 @@ let pointerStart = 0;
 let offsetStart = 0;
 let dragging = false;
 let moved = false;
+let autoScrollEnabled = true;
+let lastAutoScrollFrame = 0;
 
 function maxOffset() {
   return Math.max(0, track.getBoundingClientRect().width - stage.clientWidth + 10);
@@ -67,6 +71,27 @@ winsScrollStage.addEventListener('wheel', (event) => {
   event.preventDefault();
   winsScrollStage.scrollLeft += event.deltaY + event.deltaX;
 }, { passive: false });
+
+function autoScrollWins(timestamp) {
+  if (autoScrollEnabled && kobesWinsPanel.classList.contains('is-active')) {
+    if (lastAutoScrollFrame) {
+      const maximum = winsScrollStage.scrollWidth - winsScrollStage.clientWidth;
+      winsScrollStage.scrollLeft += ((timestamp - lastAutoScrollFrame) / 1000) * 24;
+      if (winsScrollStage.scrollLeft >= maximum - 1) winsScrollStage.scrollLeft = 0;
+    }
+    lastAutoScrollFrame = timestamp;
+  } else {
+    lastAutoScrollFrame = 0;
+  }
+  window.requestAnimationFrame(autoScrollWins);
+}
+
+autoScrollToggle.addEventListener('click', () => {
+  autoScrollEnabled = !autoScrollEnabled;
+  autoScrollToggle.setAttribute('aria-pressed', String(autoScrollEnabled));
+  autoScrollToggle.textContent = `auto scroll: ${autoScrollEnabled ? 'on' : 'off'}`;
+  lastAutoScrollFrame = 0;
+});
 
 stage.addEventListener('pointerdown', (event) => {
   if (event.button !== 0) return;
@@ -131,3 +156,4 @@ window.addEventListener('keydown', (event) => {
 const initial = window.location.hash.slice(1);
 showView(initial && document.getElementById(initial) ? initial : 'work', { updateHistory: false });
 positionTrack();
+window.requestAnimationFrame(autoScrollWins);
