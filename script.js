@@ -35,13 +35,13 @@ let moved = false;
 let autoScrollEnabled = true;
 let lastAutoScrollFrame = 0;
 
-function maxOffset() {
-  return Math.max(0, track.getBoundingClientRect().width - stage.clientWidth + 10);
-}
-
 function positionTrack() {
-  offset = Math.max(0, Math.min(offset, maxOffset()));
-  track.style.transform = `translate3d(${-offset}px, 0, 0)`;
+  document.querySelectorAll('.gallery-row').forEach((row) => {
+    const firstRepeatedTile = row.children[Math.floor(row.children.length / 3)];
+    const loopWidth = firstRepeatedTile ? firstRepeatedTile.offsetLeft : 0;
+    const loopedOffset = loopWidth ? ((offset % loopWidth) + loopWidth) % loopWidth : 0;
+    row.style.transform = `translate3d(${-loopedOffset}px, 0, 0)`;
+  });
 }
 
 function winsLoopWidth() {
