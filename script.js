@@ -1,4 +1,4 @@
-const buttons = [...document.querySelectorAll('.nav-link')];
+const buttons = [...document.querySelectorAll('[data-view]')];
 const panels = [...document.querySelectorAll('.panel')];
 const stage = document.querySelector('.work-stage');
 const track = document.querySelector('.gallery-track');
@@ -142,7 +142,7 @@ overlay.addEventListener('click', (event) => {
   if (event.target === overlay) closeDetail();
 });
 
-document.querySelector('.monogram').addEventListener('click', (event) => {
+document.querySelector('.monogram')?.addEventListener('click', (event) => {
   event.preventDefault();
   showView('work');
 });
