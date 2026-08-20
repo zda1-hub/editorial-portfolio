@@ -3,6 +3,7 @@ const panels = [...document.querySelectorAll('.panel')];
 const stage = document.querySelector('.work-stage');
 const track = document.querySelector('.gallery-track');
 const winsScrollStage = document.querySelector('.wins-scroll-stage');
+const winsScrollTrack = document.querySelector('.wins-scroll-track');
 const kobesWinsPanel = document.querySelector('#kobes-wins');
 const autoScrollToggle = document.querySelector('.auto-scroll-toggle');
 const overlay = document.querySelector('.detail-overlay');
@@ -10,12 +11,20 @@ const detailImage = document.querySelector('.detail-image');
 const detailTitle = document.querySelector('.detail-copy h2');
 const detailTag = document.querySelector('.detail-tag');
 const detailDescription = document.querySelector('.detail-description');
+const manualWinsScrollSpeed = 3;
 
 document.querySelectorAll('.gallery-row').forEach((row) => {
   const originals = [...row.children];
   for (let copy = 0; copy < 2; copy += 1) {
     originals.forEach((tile) => row.append(tile.cloneNode(true)));
   }
+});
+
+const originalWinsTiles = [...winsScrollTrack.children];
+originalWinsTiles.forEach((tile) => {
+  const repeatedTile = tile.cloneNode(true);
+  repeatedTile.setAttribute('aria-hidden', 'true');
+  winsScrollTrack.append(repeatedTile);
 });
 
 let offset = 0;
@@ -33,6 +42,19 @@ function maxOffset() {
 function positionTrack() {
   offset = Math.max(0, Math.min(offset, maxOffset()));
   track.style.transform = `translate3d(${-offset}px, 0, 0)`;
+}
+
+function winsLoopWidth() {
+  const tiles = winsScrollTrack.children;
+  const firstRepeatedTile = tiles[Math.floor(tiles.length / 2)];
+  return firstRepeatedTile ? firstRepeatedTile.offsetLeft : 0;
+}
+
+function normalizeWinsScroll() {
+  const loopWidth = winsLoopWidth();
+  if (loopWidth && winsScrollStage.scrollLeft >= loopWidth) {
+    winsScrollStage.scrollLeft -= loopWidth;
+  }
 }
 
 function showView(target, { updateHistory = true } = {}) {
@@ -69,15 +91,15 @@ stage.addEventListener('wheel', (event) => {
 
 winsScrollStage.addEventListener('wheel', (event) => {
   event.preventDefault();
-  winsScrollStage.scrollLeft += event.deltaY + event.deltaX;
+  winsScrollStage.scrollLeft += (event.deltaY + event.deltaX) * manualWinsScrollSpeed;
+  normalizeWinsScroll();
 }, { passive: false });
 
 function autoScrollWins(timestamp) {
   if (autoScrollEnabled && kobesWinsPanel.classList.contains('is-active')) {
     if (lastAutoScrollFrame) {
-      const maximum = winsScrollStage.scrollWidth - winsScrollStage.clientWidth;
-      winsScrollStage.scrollLeft += ((timestamp - lastAutoScrollFrame) / 1000) * 24;
-      if (winsScrollStage.scrollLeft >= maximum - 1) winsScrollStage.scrollLeft = 0;
+      winsScrollStage.scrollLeft += ((timestamp - lastAutoScrollFrame) / 1000) * 56;
+      normalizeWinsScroll();
     }
     lastAutoScrollFrame = timestamp;
   } else {
@@ -122,7 +144,7 @@ stage.addEventListener('pointerup', finishDrag);
 stage.addEventListener('pointercancel', finishDrag);
 
 document.querySelectorAll('.tile, .wins-scroll-tile, .recap-card').forEach((tile) => {
-  tile.tabIndex = 0;
+  tile.tabIndex = tile.getAttribute('aria-hidden') === 'true' ? -1 : 0;
   tile.setAttribute('role', 'button');
   tile.setAttribute('aria-label', `Enlarge ${tile.dataset.title}`);
   tile.addEventListener('click', () => {
@@ -147,7 +169,10 @@ document.querySelector('.monogram')?.addEventListener('click', (event) => {
   showView('work');
 });
 
-window.addEventListener('resize', positionTrack);
+window.addEventListener('resize', () => {
+  positionTrack();
+  normalizeWinsScroll();
+});
 window.addEventListener('hashchange', () => showView(window.location.hash.slice(1), { updateHistory: false }));
 window.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') closeDetail();
