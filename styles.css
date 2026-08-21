@@ -2,6 +2,7 @@
 
 :root { --paper:#f6f3ee; --ink:#594d43; --muted:#a39990; --gap:1.75vw; }
 * { box-sizing:border-box; }
+.visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 html, body { width:100%; height:100%; overflow:hidden; }
 body { margin:0; background:var(--paper); color:var(--ink); font-family:Manrope, Arial, sans-serif; font-weight:400; }
 button, a { font:inherit; color:inherit; }

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zda1-hub.github.io/editorial-portfolio/sitemap.xml
