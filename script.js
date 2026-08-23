@@ -152,15 +152,18 @@ document.querySelectorAll('.tile, .wins-scroll-tile, .recap-card').forEach((tile
   tile.tabIndex = tile.getAttribute('aria-hidden') === 'true' ? -1 : 0;
   tile.setAttribute('role', 'button');
   tile.setAttribute('aria-label', `Enlarge ${tile.dataset.title}`);
-  tile.addEventListener('click', () => {
-    if (!tile.closest('.work-stage') || !moved) openDetail(tile);
-  });
   tile.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       openDetail(tile);
     }
   });
+});
+
+document.addEventListener('click', (event) => {
+  const tile = event.target.closest('.tile, .wins-scroll-tile, .recap-card');
+  if (!tile || (tile.closest('.work-stage') && moved)) return;
+  openDetail(tile);
 });
 
 overlay.querySelector('.detail-close').addEventListener('click', closeDetail);
@@ -184,6 +187,6 @@ window.addEventListener('keydown', (event) => {
 });
 
 const initial = window.location.hash.slice(1);
-showView(initial && document.getElementById(initial) ? initial : 'work', { updateHistory: false });
+showView(initial && document.getElementById(initial) ? initial : 'join', { updateHistory: false });
 positionTrack();
 window.requestAnimationFrame(animateInfiniteSliders);

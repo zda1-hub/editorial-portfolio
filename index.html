@@ -51,12 +51,28 @@
     </script>
     <link rel="stylesheet" href="styles.css?v=value-20260820" />
     <style>
-      :root { --ink:#050505; --muted:#6b6b6b; }
+      :root { --paper:#faf9f7; --ink:#050505; --muted:#747474; }
+      body { background:var(--paper); }
       #join, .wins { outline:0; }
       body, .join-intro, .wins-heading > p:last-child, .kobes-wins-copy, .member-reviews, .value-comparison, .membership-card, .recap-card { color:#111; }
       .join-kicker, .membership-label, .recap-date, .value-list li span { color:#ff7900; }
       .header-join, .join-button { background:#050505; border-color:#050505; color:#ff7900; }
       .header-join:hover, .header-join:focus-visible, .join-button:hover { background:#252525; color:#ff7900; }
+      .site-header { border-bottom:1px solid #e5e2de; }
+      .nav-link { font-weight:500; }
+      .join { width:min(1000px, 100%); }
+      .join.is-active { grid-template-columns:minmax(0, 1fr) 360px; align-items:center; gap:42px min(9vw, 110px); padding:clamp(34px, 6vh, 80px) 0 52px; }
+      .join-intro { max-width:530px; font-size:17px; line-height:1.42; letter-spacing:-.38px; }
+      .join h2 { max-width:520px; font-size:clamp(54px, 6vw, 82px); line-height:.9; letter-spacing:-.05em; font-weight:600; }
+      .join-kicker, .membership-label { font-weight:500; }
+      .membership-card { width:360px; padding:30px; background:#fff; border-color:#111; box-shadow:none; }
+      .membership-offer { border-color:#ff7900; color:#111; }
+      .membership-offer strong, .membership-offer span, .membership-price span, .membership-card ul, .membership-terms { color:#444; }
+      .membership-price strong { font-weight:600; }
+      .membership-card li::before { color:#ff7900; }
+      .join-button { font-weight:600; letter-spacing:-.2px; }
+      .tile[data-tag*="winner"]::after { display:none; }
+      .tile:focus-visible, .wins-scroll-tile:focus-visible, .recap-card:focus-visible { outline:2px solid #ff7900; outline-offset:3px; }
       .recap-list { grid-template-columns:repeat(4, minmax(0, 1fr)); gap:12px; }
       .recap-card { padding:12px; }
       .recap-date { font-size:9px; }
@@ -66,6 +82,9 @@
       .gallery-row, .wins-scroll-track { gap:12px; }
       @media (max-width:700px) {
         .tile-n { flex-basis:118px; }
+        .join.is-active { padding:31px 0 36px; }
+        .join h2 { max-width:370px; font-size:50px; }
+        .membership-card { width:100%; }
         .recap-list { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; }
         .recap-card { padding:10px; }
         .recap-card img { aspect-ratio:1 / 1; }
@@ -139,12 +158,12 @@
         </div>
       </section>
 
-      <section class="panel join" id="join" aria-label="Join Kobe's Wins">
+      <section class="panel join" id="join" aria-label="Kobe's Betting Hub membership">
         <div class="join-intro">
-          <p class="join-kicker">MEMBERSHIP</p>
-          <h2>Know what you’re getting.</h2>
-          <p>Kobe’s Betting Hub is built around straightforward sports plays, parlays, and game-day breakdowns—not empty hype or a forced number of picks.</p>
-          <p>Inside the Discord, members can expect posted plays with the reasoning behind them, key game notes, odds context, and recaps of the days that stand out.</p>
+          <p class="join-kicker">MEMBERSHIP · START TODAY</p>
+          <h2>A better way to follow the game.</h2>
+          <p>Kobe’s Betting Hub is a members-only Discord for bettors who want a cleaner game-day routine: plays, parlays, key context, and the recaps worth looking back on.</p>
+          <p>Get used to a straightforward feed built around the action—not forced picks or empty hype.</p>
           <p class="join-note">Must be 21+ where required. Sports betting involves risk and no outcome is guaranteed.</p>
         </div>
         <article class="membership-card">
@@ -156,7 +175,7 @@
             <li>Sports plays, parlays, and breakdowns</li>
             <li>Game notes, odds context, and recaps</li>
           </ul>
-          <a class="join-button" href="https://zda1-hub.github.io/kobes-betting-hub/membership.html">View membership</a>
+          <a class="join-button" href="https://zda1-hub.github.io/kobes-betting-hub/membership.html">Join the winning team</a>
           <p class="membership-terms">First-month offer applies at signup. Membership then renews monthly until canceled. Review the membership page for current billing details.</p>
         </article>
         <section class="member-reviews" aria-labelledby="reviews-title">
