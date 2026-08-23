@@ -5,13 +5,14 @@ const track = document.querySelector('.gallery-track');
 const winsScrollStage = document.querySelector('.wins-scroll-stage');
 const winsScrollTrack = document.querySelector('.wins-scroll-track');
 const kobesWinsPanel = document.querySelector('#kobes-wins');
-const autoScrollToggle = document.querySelector('.auto-scroll-toggle');
 const overlay = document.querySelector('.detail-overlay');
 const detailImage = document.querySelector('.detail-image');
 const detailTitle = document.querySelector('.detail-copy h2');
 const detailTag = document.querySelector('.detail-tag');
 const detailDescription = document.querySelector('.detail-description');
-const manualWinsScrollSpeed = 3;
+const manualScrollSpeed = 3;
+const scrollSpeed = 72;
+const speedOnHover = 20;
 
 document.querySelectorAll('.gallery-row').forEach((row) => {
   const originals = [...row.children];
@@ -27,19 +28,20 @@ originalWinsTiles.forEach((tile) => {
   winsScrollTrack.append(repeatedTile);
 });
 
-let offset = 0;
+let proofOffset = 0;
 let pointerStart = 0;
 let offsetStart = 0;
 let dragging = false;
 let moved = false;
-let autoScrollEnabled = true;
-let lastAutoScrollFrame = 0;
+let proofHovered = false;
+let winsHovered = false;
+let lastSliderFrame = 0;
 
 function positionTrack() {
   document.querySelectorAll('.gallery-row').forEach((row) => {
     const firstRepeatedTile = row.children[Math.floor(row.children.length / 3)];
     const loopWidth = firstRepeatedTile ? firstRepeatedTile.offsetLeft : 0;
-    const loopedOffset = loopWidth ? ((offset % loopWidth) + loopWidth) % loopWidth : 0;
+    const loopedOffset = loopWidth ? ((proofOffset % loopWidth) + loopWidth) % loopWidth : 0;
     row.style.transform = `translate3d(${-loopedOffset}px, 0, 0)`;
   });
 }
@@ -85,40 +87,43 @@ buttons.forEach((button) => button.addEventListener('click', () => showView(butt
 
 stage.addEventListener('wheel', (event) => {
   event.preventDefault();
-  offset += event.deltaY + event.deltaX;
+  proofOffset += (event.deltaY + event.deltaX) * manualScrollSpeed;
   positionTrack();
 }, { passive: false });
 
 winsScrollStage.addEventListener('wheel', (event) => {
   event.preventDefault();
-  winsScrollStage.scrollLeft += (event.deltaY + event.deltaX) * manualWinsScrollSpeed;
+  winsScrollStage.scrollLeft += (event.deltaY + event.deltaX) * manualScrollSpeed;
   normalizeWinsScroll();
 }, { passive: false });
 
-function autoScrollWins(timestamp) {
-  if (autoScrollEnabled && kobesWinsPanel.classList.contains('is-active')) {
-    if (lastAutoScrollFrame) {
-      winsScrollStage.scrollLeft += ((timestamp - lastAutoScrollFrame) / 1000) * 56;
+function animateInfiniteSliders(timestamp) {
+  if (lastSliderFrame) {
+    const elapsed = Math.min((timestamp - lastSliderFrame) / 1000, 0.1);
+
+    if (document.querySelector('#work').classList.contains('is-active') && !dragging) {
+      proofOffset += elapsed * (proofHovered ? speedOnHover : scrollSpeed);
+      positionTrack();
+    }
+
+    if (kobesWinsPanel.classList.contains('is-active')) {
+      winsScrollStage.scrollLeft += elapsed * (winsHovered ? speedOnHover : scrollSpeed);
       normalizeWinsScroll();
     }
-    lastAutoScrollFrame = timestamp;
-  } else {
-    lastAutoScrollFrame = 0;
   }
-  window.requestAnimationFrame(autoScrollWins);
+  lastSliderFrame = timestamp;
+  window.requestAnimationFrame(animateInfiniteSliders);
 }
 
-autoScrollToggle.addEventListener('click', () => {
-  autoScrollEnabled = !autoScrollEnabled;
-  autoScrollToggle.setAttribute('aria-pressed', String(autoScrollEnabled));
-  autoScrollToggle.textContent = `auto scroll: ${autoScrollEnabled ? 'on' : 'off'}`;
-  lastAutoScrollFrame = 0;
-});
+stage.addEventListener('mouseenter', () => { proofHovered = true; });
+stage.addEventListener('mouseleave', () => { proofHovered = false; });
+winsScrollStage.addEventListener('mouseenter', () => { winsHovered = true; });
+winsScrollStage.addEventListener('mouseleave', () => { winsHovered = false; });
 
 stage.addEventListener('pointerdown', (event) => {
   if (event.button !== 0) return;
   pointerStart = event.clientX;
-  offsetStart = offset;
+  offsetStart = proofOffset;
   moved = false;
   dragging = true;
   stage.classList.add('is-dragging');
@@ -129,7 +134,7 @@ stage.addEventListener('pointermove', (event) => {
   if (!dragging) return;
   const distance = event.clientX - pointerStart;
   if (Math.abs(distance) > 5) moved = true;
-  offset = offsetStart - distance;
+  proofOffset = offsetStart - distance;
   positionTrack();
 });
 
@@ -181,4 +186,4 @@ window.addEventListener('keydown', (event) => {
 const initial = window.location.hash.slice(1);
 showView(initial && document.getElementById(initial) ? initial : 'work', { updateHistory: false });
 positionTrack();
-window.requestAnimationFrame(autoScrollWins);
+window.requestAnimationFrame(animateInfiniteSliders);

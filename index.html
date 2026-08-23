@@ -57,12 +57,14 @@
       .recap-date { font-size:9px; }
       .recap-card img { aspect-ratio:1 / .86; object-position:center top; }
       .recap-card p { margin-top:10px; font-size:12px; }
+      .wins-scroll-track { gap:24px; }
       @media (max-width:700px) {
         .tile-n { flex-basis:118px; }
         .recap-list { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; }
         .recap-card { padding:10px; }
         .recap-card img { aspect-ratio:1 / 1; }
         .recap-card p { margin-top:8px; font-size:11px; line-height:1.3; }
+        .wins-scroll-track { gap:10px; }
       }
     </style>
   </head>
@@ -113,8 +115,7 @@
         <div class="kobes-wins-copy">
           <p class="join-kicker">kobe's wins</p>
           <h2>Scroll through the board.</h2>
-          <p>Winning slips, parlay results, and community moments. Click any image to see the full post.</p>
-          <button class="auto-scroll-toggle" type="button" aria-pressed="true">auto scroll: on</button>
+          <p>Winning slips, parlay results, and community moments. Hover to slow the scroll, or click any image to see the full post.</p>
         </div>
         <div class="wins-scroll-stage" aria-label="Scroll sideways through Kobe's wins" tabindex="0">
           <div class="wins-scroll-track">
@@ -203,6 +204,6 @@
       </section>
     </main>
     <script src="recaps.js?v=discord-picks-20260818"></script>
-    <script src="script.js?v=home-loop-20260819"></script>
+    <script src="script.js?v=infinite-sliders-20260822"></script>
   </body>
 </html>
