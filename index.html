@@ -57,14 +57,16 @@
       .recap-date { font-size:9px; }
       .recap-card img { aspect-ratio:1 / .86; object-position:center top; }
       .recap-card p { margin-top:10px; font-size:12px; }
-      .wins-scroll-track { gap:24px; }
+      .gallery-track { gap:15px; }
+      .gallery-row, .wins-scroll-track { gap:14px; }
       @media (max-width:700px) {
         .tile-n { flex-basis:118px; }
         .recap-list { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; }
         .recap-card { padding:10px; }
         .recap-card img { aspect-ratio:1 / 1; }
         .recap-card p { margin-top:8px; font-size:11px; line-height:1.3; }
-        .wins-scroll-track { gap:10px; }
+        .gallery-track, .gallery-row { gap:3px; }
+        .wins-scroll-track { gap:6px; }
       }
     </style>
   </head>
